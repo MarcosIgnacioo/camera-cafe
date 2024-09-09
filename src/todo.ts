@@ -47,3 +47,44 @@
 // let offsetY = (startY - TILE_RADIUS < 0) ? 0 : startY - TILE_RADIUS;
 // let x = 0;
 // let y = 0;
+//
+// for (let i = 0; i < scaledCanvasWidth / TILE_WIDTH; i++) {
+//   if (offsetX + 1 < map[0].length) {
+//     offsetX = 0;
+//   }
+//   for (let j = 0; j < scaledCanvasHeight / TILE_WIDTH; j++) {
+//     if (map[offsetX] == undefined) {
+//       console.log(offsetX);
+//     }
+//     if (map[offsetX] != undefined && map[offsetX][offsetY] == 0) {
+//       drawingCanvas.drawRect(i * TILE_WIDTH, j * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT, "pink");
+//     } else if (map[offsetX] != undefined && map[offsetX][offsetY] == 1) {
+//       drawingCanvas.drawRect(i * TILE_WIDTH, j * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT, "green");
+//     } else if (map[offsetX] == undefined) {
+//       drawingCanvas.drawRect(i * TILE_WIDTH, j * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT, "blue");
+//     }
+//     if (offsetY + 1 < map[0].length) {
+//       offsetY++;
+//     }
+//   }
+//   offsetX++;
+// }
+
+for (let row = 0; row < map.length; row++) {
+  for (let column = 0; column < map[0].length; column++) {
+    const worldX = column * TILE_WIDTH
+    const worldY = row * TILE_WIDTH
+    screenX = worldX - player.worldX + player.screenX;
+    screenY = worldY - player.worldY + player.screenY;
+
+    if (map[row][column] == 1) {
+      drawingCanvas.drawRect(screenX, screenY, TILE_WIDTH, TILE_WIDTH, "black")
+    }
+
+    if (map[row][column] == 2) {
+      burgerEnt.screenX = worldToScreen(column);
+      burgerEnt.screenY = worldToScreen(row);
+      drawingCanvas.drawEntity(burgerEnt, screenX, screenY)
+    }
+  }
+}

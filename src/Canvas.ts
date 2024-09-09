@@ -1,5 +1,5 @@
 import { Entity } from "./Entity";
-import { SCALE } from "./Globals";
+import { SCALE, scaledCanvasHeight, scaledCanvasWidth } from "./Globals";
 
 export class Canvas {
   public canvas: HTMLCanvasElement
@@ -30,13 +30,17 @@ export class Canvas {
     this.context.closePath();
   }
 
-  drawEntity(entity: Entity) {
-    entity.checkBounds();
-    this.context.drawImage(entity.sprite, entity.x, entity.y);
+  drawEntity(entity: Entity, screenX: number, screenY: number) {
+    this.context.drawImage(entity.sprite, screenX, screenY);
   }
 
   drawPlayer(player: Entity) {
     player.checkBounds();
     this.context.drawImage(player.sprite, player.screenX, player.screenY);
+  }
+
+  drawText(text: string) {
+    this.drawRect(0, 0, 100, 40, "red")
+    this.context.strokeText(text, 0, 40);
   }
 }

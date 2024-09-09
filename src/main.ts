@@ -1,7 +1,26 @@
 import './index.css'
 import './Globals.ts'
 import { Entity } from './Entity.ts';
-import { canvasWidth, SCALE, canvasHeight, canvas, img, burger, RIGHT, LEFT, UP, DOWN, ctx, drawingCanvas, map, player, scaledCanvasHeight, scaledCanvasWidth, TILE_HEIGHT, TILE_RADIUS, TILE_WIDTH, coolerMap } from './Globals.ts';
+import { canvasWidth, SCALE, canvasHeight, canvas, img, burger, RIGHT, LEFT, UP, DOWN, ctx, drawingCanvas, map, player, scaledCanvasHeight, scaledCanvasWidth, TILE_HEIGHT, TILE_RADIUS, TILE_WIDTH, coolerMap, burgerEnt, world } from './Globals.ts';
+import { worldToScreen } from './UtilityFunctions.ts';
+
+function paint() {
+  update();
+  let screenX: number;
+  let screenY: number;
+  drawingCanvas.drawRect(0, 0, scaledCanvasWidth, scaledCanvasHeight, "#1d1d1d");
+  for (let i = 0; i < world.length; i++) {
+    const tile = world[i];
+    screenX = tile.worldX - player.worldX + player.screenX;
+    screenY = tile.worldY - player.worldY + player.screenY;
+    drawingCanvas.drawRect(screenX, screenY, 50, 50, tile.color);
+  }
+  console.log("player", player.worldX, player.worldY)
+
+  drawingCanvas.drawPlayer(player);
+  requestAnimationFrame(paint);
+}
+requestAnimationFrame(paint);
 
 document.addEventListener("keydown", (e) => {
   switch (e.key) {
@@ -52,39 +71,6 @@ function update() {
   }
 }
 
-
-function worldToScreen(num: number) {
-  return Math.round(num * TILE_WIDTH);
-}
-
-function screenToWorld(num: number) {
-  return Math.round(num / TILE_WIDTH);
-}
-
-function paint() {
-  update();
-  let screenX: number;
-  let screenY: number;
-  drawingCanvas.drawRect(0, 0, scaledCanvasWidth, scaledCanvasHeight, "red");
-  for (let row = 0; row < map.length; row++) {
-    for (let column = 0; column < map[0].length; column++) {
-      const worldX = column * TILE_WIDTH
-      const worldY = row * TILE_WIDTH
-      screenX = worldX - player.worldX + player.screenX;
-      screenY = worldY - player.worldY + player.screenY;
-      if (map[row][column] == 1) {
-        drawingCanvas.drawRect(screenX, screenY, TILE_WIDTH, TILE_WIDTH, "black")
-      }
-    }
-  }
-  drawingCanvas.drawPlayer(player);
-  requestAnimationFrame(paint);
-}
-requestAnimationFrame(paint);
-
-function c_is_better(num: number) {
-  return (num % 2 == 0) ? 1 : 2;
-}
 
 
 // for (let i = 0; i < scaledCanvasWidth / TILE_WIDTH; i++) {
