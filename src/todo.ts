@@ -41,6 +41,9 @@
 // }
 // hacer de los items otra clase porque oop is fucking fucking shitittt pero funciona para mi mentecita de fokita
 
+import { map, TILE_WIDTH, player, drawingCanvas, burgerEnt } from "./Globals";
+import { worldToScreen } from "./UtilityFunctions";
+
 // const startX = screenToWorld(player.x);
 // const startY = screenToWorld(player.y);
 // let offsetX = (startX - TILE_RADIUS < 0) ? 0 : startX - TILE_RADIUS;

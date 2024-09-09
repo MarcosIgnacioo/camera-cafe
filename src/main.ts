@@ -1,22 +1,18 @@
 import './index.css'
 import './Globals.ts'
-import { Entity } from './Entity.ts';
-import { canvasWidth, SCALE, canvasHeight, canvas, img, burger, RIGHT, LEFT, UP, DOWN, ctx, drawingCanvas, map, player, scaledCanvasHeight, scaledCanvasWidth, TILE_HEIGHT, TILE_RADIUS, TILE_WIDTH, coolerMap, burgerEnt, world } from './Globals.ts';
-import { worldToScreen } from './UtilityFunctions.ts';
+import { drawingCanvas, player, scaledCanvasHeight, scaledCanvasWidth, world } from './Globals.ts';
 
 function paint() {
+  drawingCanvas.drawRect(0, 0, scaledCanvasWidth, scaledCanvasHeight, "#1d1d1d");
   update();
   let screenX: number;
   let screenY: number;
-  drawingCanvas.drawRect(0, 0, scaledCanvasWidth, scaledCanvasHeight, "#1d1d1d");
   for (let i = 0; i < world.length; i++) {
     const tile = world[i];
     screenX = tile.worldX - player.worldX + player.screenX;
     screenY = tile.worldY - player.worldY + player.screenY;
-    drawingCanvas.drawRect(screenX, screenY, 50, 50, tile.color);
+    drawingCanvas.drawRect(screenX, screenY, tile.width, tile.height, tile.color);
   }
-  console.log("player", player.worldX, player.worldY)
-
   drawingCanvas.drawPlayer(player);
   requestAnimationFrame(paint);
 }
@@ -57,6 +53,8 @@ document.addEventListener("keyup", (e) => {
 });
 
 function update() {
+  const prevX = player.worldX;
+  const prevY = player.worldY;
   if (player.UP) {
     player.worldY -= player.speed;
   }
@@ -68,6 +66,13 @@ function update() {
   }
   if (player.RIGHT) {
     player.worldX += player.speed;
+  }
+  for (let i = 0; i < world.length; i++) {
+    const tile = world[i];
+    if (player.isColliding(tile)) {
+      player.superMario64CollisionRipoff(tile);
+      drawingCanvas.drawRect(0, 0, scaledCanvasWidth, scaledCanvasHeight, "red");
+    }
   }
 }
 

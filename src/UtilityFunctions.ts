@@ -12,6 +12,10 @@ export function worldToTile(num: number) {
   return Math.abs(Math.ceil(num / TILE_WIDTH))
 }
 
+export function c_is_better2(bol: boolean) {
+  return (bol) ? 1 : 0
+}
+
 export function c_is_better(num: number) {
   return (num % 2 == 0) ? 1 : 2;
 }

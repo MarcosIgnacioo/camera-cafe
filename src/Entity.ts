@@ -1,16 +1,16 @@
 import { Canvas } from "./Canvas";
 import { canvasWidth, canvasHeight, TILE_WIDTH, burgerEnt, drawingCanvas, map, player } from "./Globals";
-import { worldToScreen, worldToTile } from "./UtilityFunctions";
+import { c_is_better, c_is_better2, worldToScreen, worldToTile } from "./UtilityFunctions";
 
 
 export class Entity {
-  public x: number;
-  public y: number;
 
   public worldX: number;
   public worldY: number;
   public screenX: number;
   public screenY: number;
+  public width: number;
+  public height: number;
   public color: string;
 
   public speed: number;
@@ -22,7 +22,7 @@ export class Entity {
   public UP = false;
   public DOWN = false;
 
-  constructor(worldX: number, worldY: number, speed: number, sprite: HTMLImageElement, canvas: Canvas, color: string) {
+  constructor(worldX: number, worldY: number, width: number, height: number, speed: number, sprite: HTMLImageElement, canvas: Canvas, color: string) {
     this.worldX = worldX;
     this.worldY = worldY;
     this.screenX = worldX * 16 / 2
@@ -31,6 +31,8 @@ export class Entity {
     this.sprite = sprite;
     this.canvas = canvas;
     this.color = color;
+    this.width = width;
+    this.height = height;
   }
 
   checkBounds() {
@@ -47,6 +49,29 @@ export class Entity {
       this.screenY = canvasHeight - this.sprite.height
     }
   }
+
+  isColliding(target: Entity) {
+    return (
+      (this.worldX + this.width >= target.worldX && this.worldX <= target.worldX + target.width) &&
+      (this.worldY + this.height >= target.worldY && this.worldY <= target.worldY + target.height))
+  }
+
+  superMario64CollisionRipoff(target: Entity) {
+    if (player.RIGHT) {
+      this.worldX = target.worldX - this.width - 1
+      return
+    } else if (player.LEFT) {
+      this.worldX = target.worldX + target.width + 1
+      return
+    }
+
+    if (player.DOWN) {
+      this.worldY = target.worldY - this.height - 1
+    } else if (player.UP) {
+      this.worldY = target.worldY + target.height + 1
+    }
+  }
+
   move() {
   }
 }
